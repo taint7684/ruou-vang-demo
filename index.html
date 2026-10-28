@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hầm Rượu Vân</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+/* Bố cục: thanh trên dính + mega menu · hero dải than · các khu trang chủ xếp dọc ·
+   Cửa hàng = cột lọc 260px + lưới · chi tiết 2 cột · giỏ/đặt hàng 2 cột · mobile có thanh điều hướng đáy */
+:root{
+  --bg:#faf6ef; --surface:#ffffff; --sunk:#f3ece2; --ink:#1e1a1b; --muted:#675d60; --line:#e6ddd1;
+  --wine:#6b1527; --wine-hover:#561020; --on-wine:#ffffff; --gold:#a8833f; --gold-soft:#efe2c6;
+  --char:#1b1718; --on-char:#f4ede3; --on-char-muted:#bfb3a8;
+  --ok:#2c6a44; --err:#a3242f; --shadow:0 10px 30px rgb(30 20 22 / .08);
+  --display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:12px; --max:1240px;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body.lock{overflow:hidden}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.2;margin:0;text-wrap:balance}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+.ico{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* Nút */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 22px;border-radius:999px;font-weight:600;font-size:.92rem;transition:background .15s,color .15s,border-color .15s}
+.btn-primary{background:var(--wine);color:var(--on-wine)}
+.btn-primary:hover{background:var(--wine-hover)}
+.btn-primary:active{transform:translateY(1px)}
+.btn-line{border:1.5px solid var(--line);background:var(--surface)}
+.btn-line:hover{border-color:var(--wine);color:var(--wine)}
+.btn-gold{background:var(--gold);color:#1b1718}
+.btn-gold:hover{filter:brightness(1.07)}
+.btn-ghost-light{border:1.5px solid var(--wine);color:var(--wine);background:var(--surface)}
+.btn-ghost-light:hover{background:var(--wine);color:var(--on-wine)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.link{color:var(--wine);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* Thanh thông tin trên cùng */
+.topline{background:var(--sunk);color:var(--muted);font-size:.8rem;border-bottom:1px solid var(--line)}
+.topline .wrap{display:flex;justify-content:space-between;gap:16px;padding-block:7px;flex-wrap:wrap}
+.topline strong{color:var(--wine)}
+
+/* Header */
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--surface)}
+.hbar{display:flex;align-items:center;gap:18px;padding-block:12px}
+.logo{display:flex;flex-direction:column;text-decoration:none;line-height:1.1}
+.logo b{font-family:var(--display);font-size:1.5rem;color:var(--wine);font-weight:700}
+.logo span{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.catbtn{display:flex;align-items:center;gap:8px;font-weight:600;padding:10px 14px;border-radius:999px;background:var(--sunk)}
+.catbtn[aria-expanded="true"]{background:var(--wine);color:var(--on-wine)}
+.search{position:relative;flex:1;min-width:0}
+.search input{width:100%;height:44px;padding:0 44px 0 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg)}
+.search input:focus{border-color:var(--wine);outline:none}
+.search .go{position:absolute;right:4px;top:4px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--wine)}
+.suggest{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:6px;z-index:5}
+.suggest button{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:8px;border-radius:8px}
+.suggest button:hover,.suggest button.on{background:var(--sunk)}
+.suggest svg{height:44px;width:24px}
+.suggest small{display:block;color:var(--muted)}
+.suggest .all{justify-content:center;color:var(--wine);font-weight:600}
+.hicons{display:flex;gap:4px}
+.hicon{position:relative;width:44px;height:44px;display:grid;place-items:center;border-radius:50%}
+.hicon:hover{background:var(--sunk)}
+.badge-n{position:absolute;top:3px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--wine);color:var(--on-wine);font-size:.68rem;font-weight:700;display:grid;place-items:center}
+.only-m{display:none}
+
+/* Thanh danh mục luôn hiện */
+.catnav{background:var(--wine)}
+.catnav .wrap{display:flex;align-items:stretch;gap:2px}
+.catnav .wrap > button,.dd > button{color:#fff;padding:12px 14px;font-weight:500;font-size:.92rem;white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.catnav .wrap > button:hover,.dd > button:hover,.dd:focus-within > button{background:rgb(255 255 255 / .12)}
+.catnav [aria-current="page"]{border-bottom-color:#e6c27f;font-weight:700}
+.catnav .chev{font-size:.7rem;opacity:.8}
+.dd{position:relative;display:flex}
+.ddm{position:absolute;top:100%;left:0;min-width:220px;background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;box-shadow:var(--shadow);padding:6px;display:none;z-index:5}
+.dd:hover .ddm,.dd:focus-within .ddm{display:grid}
+.ddm button{color:var(--ink);padding:9px 12px;border-radius:6px;text-align:left}
+.ddm button:hover{background:var(--sunk);color:var(--wine)}
+@media (max-width:1080px){.catnav .wrap{overflow-x:auto;scrollbar-width:none}.catnav .wrap::-webkit-scrollbar{display:none}.dd{display:none}}
+
+/* Mega menu */
+.mega{position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.mega .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding-block:24px 28px}
+.mega h4{font-family:var(--body);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600}
+.mega ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.mega li button{width:100%;text-align:left;padding:7px 8px;border-radius:6px}
+.mega li button:hover{background:var(--sunk);color:var(--wine)}
+
+/* Hero */
+.hero{background:linear-gradient(120deg,#fbf6ee 0%,#f3e7d6 100%);color:var(--ink);overflow:hidden;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;padding-block:56px 48px}
+.hero h1{font-size:clamp(2.1rem,4.6vw,3.6rem);font-weight:500;letter-spacing:-.01em}
+.hero h1 em{color:var(--wine);font-style:italic}
+.hero p{color:var(--muted);max-width:50ch;margin:16px 0 26px;font-size:1.02rem}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero-art{display:flex;justify-content:center;align-items:flex-end;gap:6px;min-height:300px}
+.hero-art svg{height:320px;width:auto}
+.hero-art svg + svg{height:250px}
+.occ{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.occ span{font-size:.8rem;color:var(--muted);align-self:center;margin-right:4px}
+.occ button{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:.85rem}
+.occ button:hover{border-color:var(--wine);color:var(--wine)}
+
+/* Khu trang chủ */
+section.block{padding-block:56px 8px}
+.shead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.shead h2{font-size:clamp(1.5rem,2.6vw,2.1rem)}
+.shead p{margin:6px 0 0;color:var(--muted)}
+.cats{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.cat{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:border-color .15s,transform .15s;text-align:center}
+.cat:hover{border-color:var(--wine);transform:translateY(-2px)}
+.cat svg{height:96px;width:auto}
+.cat b{font-weight:600;font-size:.92rem}
+.cat small{color:var(--muted);font-size:.78rem;margin-top:-6px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:8px 16px;border-radius:999px;border:1px solid var(--line);font-size:.88rem;font-weight:500;background:var(--surface)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.budget{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.budget button{text-align:left;padding:20px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.budget button:hover{border-color:var(--gold)}
+.budget b{font-family:var(--display);font-size:1.3rem;font-weight:600}
+.budget span{color:var(--muted);font-size:.85rem}
+.budget em{font-style:normal;color:var(--wine);font-weight:600;font-size:.85rem;margin-top:6px}
+.guide{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.guide article{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.guide h3{font-size:1.15rem;margin:8px 0 10px}
+.guide table{width:100%;border-collapse:collapse;font-size:.88rem;font-variant-numeric:tabular-nums}
+.guide td{padding:6px 0;border-bottom:1px solid var(--line)}
+.guide td:last-child{text-align:right;font-weight:600}
+.guide ul{margin:0;padding-left:18px;color:var(--muted);font-size:.9rem;display:grid;gap:6px}
+.guide p{color:var(--muted);font-size:.9rem;margin:0}
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:0 18px}
+.faq summary{cursor:pointer;padding:16px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::after{content:"+";color:var(--wine);font-size:1.2rem;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin:0 0 16px;color:var(--muted)}
+
+/* Thẻ sản phẩm */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:box-shadow .2s,border-color .2s}
+.card:hover{box-shadow:var(--shadow);border-color:transparent}
+.card .art{display:flex;justify-content:center;align-items:flex-end;height:210px;padding-top:16px;background:linear-gradient(var(--sunk),var(--surface))}
+.card .art svg{height:180px;width:auto}
+.flag{position:absolute;left:12px;top:12px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--wine)}
+.fav{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.fav[aria-pressed="true"]{color:var(--wine);border-color:var(--wine)}
+.fav[aria-pressed="true"] .ico{fill:currentColor}
+.card .info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.meta{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card h3{font-family:var(--body);font-size:.98rem;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+.card h3 a{text-decoration:none}
+.card h3 a:hover{color:var(--wine)}
+.spec{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.price{font-weight:700;font-size:1.08rem;color:var(--wine);font-variant-numeric:tabular-nums}
+.card .foot{margin-top:auto;padding-top:10px;display:flex;flex-direction:column;gap:10px}
+.card .btn{min-height:40px;width:100%}
+
+/* Cửa hàng */
+.crumb{font-size:.84rem;color:var(--muted);padding-block:18px 4px;display:flex;gap:6px;flex-wrap:wrap}
+.crumb button{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.crumb button:hover{color:var(--wine)}
+.shop{display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px;padding-block:12px 64px}
+.filters{display:flex;flex-direction:column;gap:22px;align-self:start;position:sticky;top:calc(env(safe-area-inset-top,0px) + 136px);max-height:calc(100vh - 156px);overflow:auto;padding-right:4px}
+.fhead{display:none}
+.fg h3{font-family:var(--body);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+.fg label{display:flex;align-items:center;gap:10px;padding:5px 0;cursor:pointer;font-size:.92rem}
+.fg label small{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.fg input[type=checkbox],.fg input[type=radio]{width:18px;height:18px;accent-color:var(--wine)}
+.ftools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ftools h1{font-size:clamp(1.5rem,2.6vw,2rem)}
+.ftools p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.ftools .right{display:flex;gap:10px;align-items:center}
+.ftools select{height:42px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.fbtn{display:none}
+.active{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.active button{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--gold-soft);font-size:.82rem;font-weight:500}
+.active .clear{background:none;color:var(--wine);text-decoration:underline}
+.empty{border:1.5px dashed var(--line);border-radius:var(--r);padding:48px 20px;text-align:center;display:grid;gap:12px;justify-items:center;color:var(--muted)}
+.empty h3{color:var(--ink);font-size:1.25rem}
+
+/* Chi tiết */
+.pd{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-block:12px 40px}
+.pd .stage{background:linear-gradient(var(--sunk),var(--surface));border:1px solid var(--line);border-radius:16px;display:flex;justify-content:center;align-items:flex-end;min-height:480px;padding-top:30px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 140px);align-self:start}
+.pd .stage svg{height:420px;width:auto}
+.pd h1{font-size:clamp(1.7rem,3vw,2.4rem);margin:6px 0 8px}
+.pd .price{font-size:1.6rem}
+.pd .lead{color:var(--muted);margin:14px 0 20px;max-width:58ch}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:22px}
+.facts div{background:var(--surface);padding:12px 14px}
+.facts dt{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.facts dd{margin:2px 0 0;font-weight:600;font-variant-numeric:tabular-nums}
+.buy{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+.stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;height:44px}
+.stepper button{width:40px;height:100%;font-size:1.2rem;color:var(--wine)}
+.stepper button:disabled{color:var(--muted);cursor:not-allowed}
+.stepper output{min-width:32px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.pd .fav{position:static;width:44px;height:44px}
+.notes{display:grid;gap:18px;border-top:1px solid var(--line);padding-top:22px}
+.notes h3{font-family:var(--body);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px}
+.notes p{margin:0}
+
+/* Giỏ + đặt hàng */
+.cartg{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;padding-block:12px 64px;align-items:start}
+.lines{display:grid;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.line{display:grid;grid-template-columns:72px minmax(0,1fr) auto auto;gap:16px;align-items:center;padding:16px;border-bottom:1px solid var(--line)}
+.line:last-child{border-bottom:0}
+.line .thumb{height:90px;display:flex;justify-content:center;align-items:flex-end;background:var(--sunk);border-radius:8px}
+.line .thumb svg{height:80px;width:auto}
+.line a{font-weight:600;text-decoration:none}
+.line a:hover{color:var(--wine)}
+.line .rm{color:var(--muted);font-size:.82rem;text-decoration:underline;margin-top:4px}
+.line .rm:hover{color:var(--err)}
+.line .lt{font-weight:700;font-variant-numeric:tabular-nums;min-width:110px;text-align:right}
+.sum{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:12px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 140px)}
+.sum h2{font-size:1.3rem}
+.sum .r{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.sum .r span:first-child{color:var(--muted)}
+.sum .tot{border-top:1px solid var(--line);padding-top:12px;font-weight:700;font-size:1.15rem}
+.sum .note{font-size:.8rem;color:var(--muted);margin:0}
+.form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:18px}
+.form h2{font-size:1.3rem}
+.field{display:grid;gap:6px}
+.field label,.field legend{font-weight:600;font-size:.88rem}
+.field input,.field textarea{min-height:46px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);width:100%}
+.field input:focus,.field textarea:focus{border-color:var(--wine);outline:none}
+.field[data-err] input,.field[data-err] textarea{border-color:var(--err)}
+.field .msg{font-size:.82rem;color:var(--err);display:none}
+.field[data-err] .msg{display:block}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+fieldset{border:0;margin:0;padding:0}
+.pay{display:grid;gap:8px;margin-top:6px}
+.pay label{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;font-weight:400}
+.pay label:has(input:checked){border-color:var(--wine);background:var(--sunk)}
+.pay input{accent-color:var(--wine);margin-top:4px}
+.pay small{display:block;color:var(--muted)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.9rem}
+.check input{width:18px;height:18px;accent-color:var(--wine);margin-top:3px}
+.alert{border-radius:10px;padding:14px 16px;font-size:.9rem;display:grid;gap:6px}
+.alert-info{background:var(--gold-soft);border:1px solid var(--gold)}
+.alert-err{border:1px solid var(--err);color:var(--err)}
+.alert b{font-weight:700}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);z-index:60;background:var(--char);color:var(--on-char);padding:12px 14px 12px 18px;border-radius:999px;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow);max-width:calc(100% - 32px);font-size:.9rem}
+.toast button{color:var(--gold);font-weight:700;white-space:nowrap}
+
+/* Hộp hỏi tuổi */
+.gate{position:fixed;inset:0;z-index:80;background:rgb(14 11 12 / .78);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px}
+.gate .box{background:var(--surface);border-radius:18px;max-width:440px;width:100%;padding:34px 28px;text-align:center;display:grid;gap:14px}
+.gate h2{font-size:1.7rem}
+.gate p{margin:0;color:var(--muted)}
+.gate .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+
+/* Ngăn kéo menu mobile */
+.shade{position:fixed;inset:0;z-index:49;background:rgb(14 11 12 / .5)}
+.drawer{position:fixed;inset:0 auto 0 0;z-index:50;width:min(340px,88%);background:var(--surface);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 16px) 18px calc(env(safe-area-inset-bottom,0px) + 24px) max(18px,env(safe-area-inset-left,0px));display:grid;gap:18px;align-content:start}
+.drawer h4{font-family:var(--body);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.drawer ul{list-style:none;margin:0;padding:0}
+.drawer li button{width:100%;text-align:left;padding:11px 4px;border-bottom:1px solid var(--line);font-weight:500}
+.dtop{display:flex;justify-content:space-between;align-items:center}
+
+/* Footer */
+footer.site{background:var(--sunk);color:var(--muted);margin-top:64px;font-size:.88rem;border-top:1px solid var(--line)}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;padding-block:48px 32px}
+footer h4{font-family:var(--body);color:var(--ink);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+footer li button{color:var(--muted);text-align:left}
+footer li button:hover{color:var(--wine)}
+footer .brand b{font-family:var(--display);color:var(--wine);font-size:1.5rem}
+footer .brand p{margin:10px 0 0;max-width:34ch}
+footer .legal{border-top:1px solid var(--line);padding-block:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.8rem}
+footer .legal strong{color:var(--wine)}
+.demo-tag{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:999px;border:1px solid currentColor;margin-left:6px;vertical-align:middle;letter-spacing:.06em}
+
+/* Thanh đáy mobile */
+.bnav{display:none}
+
+/* Tablet */
+@media (max-width:1080px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cats{grid-template-columns:repeat(3,1fr)}
+  .catbtn span{display:none}
+}
+@media (max-width:900px){
+  .shop{grid-template-columns:1fr}
+  .filters{position:fixed;inset:0 0 0 auto;z-index:50;width:min(360px,92%);max-height:none;background:var(--surface);padding:calc(env(safe-area-inset-top,0px) + 16px) max(18px,env(safe-area-inset-right,0px)) 0 18px;transform:translateX(100%);transition:transform .25s;top:0}
+  .filters{visibility:hidden;overflow:hidden;height:100%;gap:14px}
+  #fBody{flex:1;min-height:0;overflow:auto;padding-bottom:8px}
+  .filters.open{transform:none;visibility:visible}
+  .fhead{display:flex;justify-content:space-between;align-items:center}
+  .fhead h2{font-size:1.3rem}
+  .fapply{flex:none;background:var(--surface);border-top:1px solid var(--line);padding:12px 0 calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;gap:10px}
+  .fapply .btn{flex:1}
+  .fbtn{display:inline-flex}
+  .pd{grid-template-columns:1fr;gap:24px}
+  .pd .stage{position:static;min-height:340px}
+  .pd .stage svg{height:300px}
+  .cartg{grid-template-columns:1fr}
+  .sum{position:static}
+  .guide{grid-template-columns:1fr}
+  .budget{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  footer .cols{grid-template-columns:1fr 1fr}
+  .mega .wrap{grid-template-columns:repeat(2,1fr)}
+}
+@media (min-width:901px){.fapply{display:none}}
+/* Mobile */
+@media (max-width:640px){
+  body{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 64px)}
+  .topline .hide-m{display:none}
+  .hbar{flex-wrap:wrap;gap:8px;padding-block:8px}
+  .logo{flex:1;order:2}
+  .logo b{font-size:1.3rem}
+  .only-m{display:grid}
+  .catbtn,.hicons .fav-h{display:none}
+  #menuBtn{order:1}
+  .hicons{order:3}
+  .search{order:4;flex-basis:100%}
+  .hero .wrap{grid-template-columns:1fr;padding-block:32px 28px}
+  .hero-art{min-height:0;order:-1}
+  .hero-art svg{height:170px}.hero-art svg + svg{height:130px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card .art{height:160px}.card .art svg{height:140px}
+  .card .info{padding:10px 12px 12px}
+  .card h3{font-size:.9rem}
+  .card .btn{font-size:.82rem;padding:0 10px}
+  .cats{grid-template-columns:repeat(3,1fr);gap:8px}
+  .cat{padding:12px 6px}.cat svg{height:64px}.cat small{display:none}.cat b{font-size:.82rem}
+  .line{grid-template-columns:60px minmax(0,1fr) auto;gap:10px 12px}
+  .line .thumb{grid-row:span 2;height:80px}
+  .line > div:nth-child(2){grid-column:2 / 4}
+  .line .lt{text-align:right;min-width:0}
+  .row2{grid-template-columns:1fr}
+  footer .cols{grid-template-columns:1fr}
+  .bnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:45;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 6px) max(8px,env(safe-area-inset-left,0px))}
+  .bnav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.7rem;color:var(--muted);padding:4px 0;position:relative}
+  .bnav button[aria-current="page"]{color:var(--wine);font-weight:600}
+  .bnav .badge-n{right:calc(50% - 22px)}
+  .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 76px);border-radius:14px;width:calc(100% - 32px)}
+  .buy [data-addq]{order:3;flex-basis:100%}
+}
+</style>
+</head>
+<body>
+
+<a class="sr" href="#main">Bỏ qua đến nội dung chính</a>
+
+<div class="topline"><div class="wrap">
+  <span>Tư vấn chọn rượu: <strong>0900 000 000</strong> <span class="demo-tag">số demo</span></span>
+  <span class="hide-m">Không bán rượu cho người dưới 18 tuổi</span>
+</div></div>
+
+<header class="site">
+  <div class="wrap hbar">
+    <button class="hicon only-m" id="menuBtn" type="button" aria-label="Mở menu danh mục"><svg class="ico"><use href="#i-menu"/></svg></button>
+    <a class="logo" href="#home" aria-label="Hầm Rượu Vân, về trang chủ"><b>Hầm Rượu Vân</b><span>Vang · Rượu mạnh · Quà tặng</span></a>
+    <form class="search" id="searchForm" role="search" autocomplete="off">
+      <label class="sr" for="q">Tìm sản phẩm</label>
+      <input id="q" type="search" placeholder="Tìm tên rượu, thương hiệu, giống nho, vùng…" aria-autocomplete="list" aria-controls="suggest">
+      <button class="go" type="submit" aria-label="Tìm"><svg class="ico"><use href="#i-search"/></svg></button>
+      <div class="suggest" id="suggest" role="listbox" hidden></div>
+    </form>
+    <nav class="hicons" aria-label="Tài khoản và giỏ hàng">
+      <button class="hicon fav-h" type="button" data-nav="fav" aria-label="Sản phẩm yêu thích"><svg class="ico"><use href="#i-heart"/></svg><span class="badge-n" data-favn hidden>0</span></button>
+      <button class="hicon" type="button" data-nav="cart" aria-label="Giỏ hàng"><svg class="ico"><use href="#i-bag"/></svg><span class="badge-n" data-cartn hidden>0</span></button>
+    </nav>
+  </div>
+  <nav class="catnav" aria-label="Danh mục sản phẩm"><div class="wrap" id="catnav"></div></nav>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- TRANG CHỦ -->
+<div data-view="home">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Vang nhập khẩu · Quà biếu doanh nghiệp</p>
+        <h1>Chọn đúng chai <em>cho từng dịp</em>, từ bữa tối gia đình đến quà biếu đối tác.</h1>
+        <p>Mỗi sản phẩm ghi rõ vùng trồng, giống nho, niên vụ, độ cồn và món ăn hợp, để bạn chọn nhanh mà không cần thuộc tên rượu.</p>
+        <div class="ctas">
+          <button class="btn btn-primary" type="button" data-go="all">Khám phá bộ sưu tập</button>
+          <button class="btn btn-ghost-light" type="button" data-go="type:qua">Chọn quà tặng</button>
+        </div>
+        <div class="occ" id="occ"><span>Chọn theo dịp:</span></div>
+      </div>
+      <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section class="block wrap" aria-labelledby="h-cat">
+    <div class="shead"><div><h2 id="h-cat">Danh mục</h2><p>Bắt đầu từ loại rượu bạn cần.</p></div></div>
+    <div class="cats" id="cats"></div>
+  </section>
+
+  <section class="block wrap" aria-labelledby="h-pick">
+    <div class="shead">
+      <div><h2 id="h-pick">Gợi ý từ hầm rượu</h2><p>Các nhãn được chọn sẵn để bạn bắt đầu.</p></div>
+      <div class="tabs" role="tablist" id="pickTabs">
+        <button class="tab" role="tab" type="button" aria-selected="true" data-tag="noibat">Nổi bật</button>
+        <button class="tab" role="tab" type="button" aria-selected="false" data-tag="banchay">Bán chạy</button>
+        <button class="tab" role="tab" type="button" aria-selected="false" data-tag="moi">Mới về</button>
+      </div>
+    </div>
+    <div class="grid" id="pickGrid" role="tabpanel"></div>
+  </section>
+
+  <section class="block wrap" aria-labelledby="h-gift">
+    <div class="shead"><div><h2 id="h-gift">Quà tặng theo ngân sách</h2><p>Hộp quà, vang và phụ kiện, lọc sẵn theo mức giá.</p></div>
+      <button class="link" type="button" data-go="type:qua">Xem tất cả hộp quà</button></div>
+    <div class="budget" id="budget"></div>
+  </section>
+
+  <section class="block wrap" aria-labelledby="h-guide">
+    <div class="shead"><div><h2 id="h-guide">Kiến thức thưởng thức</h2><p>Ba điều nên biết trước khi mở chai.</p></div></div>
+    <div class="guide">
+      <article>
+        <p class="eyebrow">Nhiệt độ phục vụ</p>
+        <h3>Mỗi loại một mức lạnh</h3>
+        <table><tbody>
+          <tr><td>Vang đỏ đậm</td><td>16–18°C</td></tr>
+          <tr><td>Vang đỏ nhẹ</td><td>13–15°C</td></tr>
+          <tr><td>Vang trắng</td><td>8–12°C</td></tr>
+          <tr><td>Champagne, vang nổ</td><td>6–8°C</td></tr>
+        </tbody></table>
+      </article>
+      <article>
+        <p class="eyebrow">Kết hợp món ăn</p>
+        <h3>Đậm đi với đậm, nhẹ đi với nhẹ</h3>
+        <ul>
+          <li>Bò, cừu, thịt nướng: Cabernet Sauvignon, Malbec, Shiraz.</li>
+          <li>Hải sản, gỏi: Sauvignon Blanc, Riesling, vang nổ.</li>
+          <li>Gà, cá hồi, món sốt kem: Chardonnay.</li>
+          <li>Tráng miệng: Moscato d'Asti.</li>
+        </ul>
+      </article>
+      <article>
+        <p class="eyebrow">Bảo quản</p>
+        <h3>Chai chưa mở và đã mở</h3>
+        <ul>
+          <li>Chai nút bần nên đặt nằm, tránh nắng, nơi nhiệt độ ổn định.</li>
+          <li>Chai đã mở: đậy nút, để tủ lạnh, nên dùng trong vài ngày.</li>
+          <li>Rượu mạnh để đứng, đậy kín, không cần làm lạnh.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="block wrap" aria-labelledby="h-faq">
+    <div class="shead"><div><h2 id="h-faq">Câu hỏi thường gặp</h2></div></div>
+    <div class="faq">
+      <details><summary>Ai được mua rượu trên trang này?</summary><p>Chỉ khách từ đủ 18 tuổi. Trang hỏi tuổi khi bạn vào lần đầu và khi đặt hàng.</p></details>
+      <details><summary>Tôi chưa rành về rượu, nên chọn thế nào?</summary><p>Chọn theo dịp ở đầu trang, hoặc lọc theo loại rượu và mức giá. Mỗi sản phẩm có mục món ăn hợp và nhiệt độ phục vụ.</p></details>
+      <details><summary>Có hộp quà cho doanh nghiệp không?</summary><p>Có mục Hộp quà, lọc sẵn theo ngân sách. Đơn số lượng lớn hoặc in logo cần trao đổi trực tiếp với cửa hàng qua hotline.</p></details>
+      <details><summary>Thanh toán bằng cách nào?</summary><p>Bản demo có hai lựa chọn: thanh toán khi nhận hàng và chuyển khoản. Bản thật sẽ dùng phương thức cửa hàng cung cấp.</p></details>
+    </div>
+  </section>
+</div>
+
+<!-- CỬA HÀNG -->
+<div data-view="shop" hidden>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Vị trí"><button type="button" data-nav="home">Trang chủ</button><span>/</span><span id="shopCrumb">Tất cả sản phẩm</span></nav>
+    <div class="shop">
+      <aside class="filters" id="filters" aria-label="Bộ lọc">
+        <div class="fhead"><h2>Bộ lọc</h2><button class="hicon" type="button" data-closef aria-label="Đóng bộ lọc"><svg class="ico"><use href="#i-x"/></svg></button></div>
+        <div id="fBody" style="display:grid;gap:22px"></div>
+        <div class="fapply"><button class="btn btn-line" type="button" data-clear>Xóa lọc</button><button class="btn btn-primary" type="button" data-closef id="fApplyBtn">Xem sản phẩm</button></div>
+      </aside>
+      <div>
+        <div class="ftools">
+          <div><h1 id="shopTitle">Tất cả sản phẩm</h1><p id="shopCount" aria-live="polite"></p></div>
+          <div class="right">
+            <button class="btn btn-line fbtn" type="button" id="openF"><svg class="ico"><use href="#i-filter"/></svg>Bộ lọc</button>
+            <label class="sr" for="sort">Sắp xếp</label>
+            <select id="sort">
+              <option value="rel">Phù hợp nhất</option>
+              <option value="asc">Giá thấp đến cao</option>
+              <option value="desc">Giá cao đến thấp</option>
+              <option value="new">Mới về</option>
+            </select>
+          </div>
+        </div>
+        <div class="active" id="activeF"></div>
+        <div class="grid" id="shopGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHI TIẾT -->
+<div data-view="product" hidden><div class="wrap" id="pdBody"></div></div>
+
+<!-- YÊU THÍCH -->
+<div data-view="fav" hidden>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Vị trí"><button type="button" data-nav="home">Trang chủ</button><span>/</span><span>Yêu thích</span></nav>
+    <div class="ftools"><div><h1>Sản phẩm yêu thích</h1><p id="favCount"></p></div></div>
+    <div class="grid" id="favGrid"></div>
+    <p class="spec" style="margin-top:16px">Danh sách lưu trên trình duyệt này. Đồng bộ giữa các máy cần tài khoản và backend.</p>
+  </div>
+</div>
+
+<!-- GIỎ HÀNG -->
+<div data-view="cart" hidden><div class="wrap" id="cartBody"></div></div>
+
+<!-- ĐẶT HÀNG -->
+<div data-view="checkout" hidden><div class="wrap" id="coBody"></div></div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap cols">
+    <div class="brand"><b>Hầm Rượu Vân</b><span class="demo-tag">bản demo</span><p>Vang nhập khẩu, rượu mạnh và hộp quà. Tên thương hiệu, sản phẩm và giá trên trang là dữ liệu mẫu.</p></div>
+    <div><h4>Mua sắm</h4><ul>
+      <li><button type="button" data-go="type:do">Vang đỏ</button></li>
+      <li><button type="button" data-go="type:trang">Vang trắng</button></li>
+      <li><button type="button" data-go="type:no">Champagne &amp; vang nổ</button></li>
+      <li><button type="button" data-go="type:manh">Rượu mạnh</button></li>
+      <li><button type="button" data-go="type:qua">Hộp quà</button></li>
+    </ul></div>
+    <div><h4>Hỗ trợ</h4><ul>
+      <li><button type="button" data-scroll="h-faq">Câu hỏi thường gặp</button></li>
+      <li><button type="button" data-scroll="h-guide">Kiến thức thưởng thức</button></li>
+      <li><button type="button" data-nav="cart">Giỏ hàng</button></li>
+    </ul></div>
+    <div><h4>Liên hệ</h4><ul>
+      <li>Hotline / Zalo: 0900 000 000</li>
+      <li>Địa chỉ cửa hàng: cập nhật khi có thông tin</li>
+      <li>Giấy phép bán lẻ rượu: cập nhật khi có thông tin</li>
+    </ul></div>
+  </div>
+  <div class="wrap legal"><span>© 2026 Hầm Rượu Vân · Bản demo giao diện</span><strong>Không bán rượu cho người dưới 18 tuổi. Đã uống rượu bia, không lái xe.</strong></div>
+</footer>
+
+<nav class="bnav" aria-label="Điều hướng nhanh">
+  <button type="button" data-nav="home"><svg class="ico"><use href="#i-home"/></svg>Trang chủ</button>
+  <button type="button" data-nav="shop"><svg class="ico"><use href="#i-grid"/></svg>Cửa hàng</button>
+  <button type="button" data-nav="fav"><svg class="ico"><use href="#i-heart"/></svg>Yêu thích<span class="badge-n" data-favn hidden>0</span></button>
+  <button type="button" data-nav="cart"><svg class="ico"><use href="#i-bag"/></svg>Giỏ hàng<span class="badge-n" data-cartn hidden>0</span></button>
+</nav>
+
+<div class="shade" id="shade" hidden></div>
+<nav class="drawer" id="drawer" hidden aria-label="Danh mục">
+  <div class="dtop"><b style="font-family:var(--display);font-size:1.3rem;color:var(--wine)">Danh mục</b><button class="hicon" type="button" id="closeDrawer" aria-label="Đóng menu"><svg class="ico"><use href="#i-x"/></svg></button></div>
+  <div id="drawerBody" style="display:grid;gap:18px"></div>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" data-nav="cart">Xem giỏ</button></div>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT">
+  <div class="box">
+    <p class="eyebrow">Hầm Rượu Vân</p>
+    <h2 id="gateT">Bạn đã đủ 18 tuổi?</h2>
+    <p id="gateMsg">Trang có nội dung về đồ uống có cồn, chỉ dành cho người từ đủ 18 tuổi.</p>
+    <div class="acts" id="gateActs"><button class="btn btn-primary" type="button" id="gateYes">Tôi đủ 18 tuổi</button><button class="btn btn-line" type="button" id="gateNo">Chưa đủ 18 tuổi</button></div>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+</svg>
+
+<script>
+"use strict";
+/* ===== Dữ liệu mẫu ===== */
+const TYPES={
+  do:{n:"Vang đỏ",d:"Bordeaux, Malbec, Shiraz"},
+  trang:{n:"Vang trắng",d:"Sauvignon Blanc, Chardonnay"},
+  no:{n:"Champagne & vang nổ",d:"Champagne, Prosecco"},
+  manh:{n:"Rượu mạnh",d:"Whisky, Cognac"},
+  qua:{n:"Hộp quà",d:"Biếu Tết, tri ân đối tác"},
+  pk:{n:"Phụ kiện",d:"Ly, mở nút, bình chiết"}
+};
+const P=[
+ {id:1,name:"Domaine Lavaud Bordeaux Supérieur",brand:"Domaine Lavaud",type:"do",country:"Pháp",region:"Bordeaux",grape:"Merlot, Cabernet Sauvignon",vin:"2019",abv:13.5,vol:750,price:690000,tags:["noibat"],col:"#4b1020",lead:"Vang đỏ Bordeaux cân bằng, tannin mềm, hợp bữa tối gia đình.",taste:"Mận chín, lý chua đen, chút gỗ sồi.",food:"Bò sốt vang, vịt quay, phô mai cứng.",temp:"16–18°C"},
+ {id:2,name:"Château Bellerive Saint-Émilion Grand Cru",brand:"Château Bellerive",type:"do",country:"Pháp",region:"Bordeaux, Saint-Émilion",grape:"Merlot, Cabernet Franc",vin:"2018",abv:14,vol:750,price:1890000,tags:["noibat","banchay"],col:"#3a0c18",lead:"Grand Cru bờ phải Bordeaux, cấu trúc đầy đặn, hợp làm quà biếu.",taste:"Anh đào đen, thuốc lá, vani.",food:"Thăn bò, sườn cừu nướng.",temp:"17–18°C"},
+ {id:3,name:"Bodega Altamira Malbec Reserva",brand:"Bodega Altamira",type:"do",country:"Argentina",region:"Mendoza",grape:"Malbec",vin:"2020",abv:14,vol:750,price:560000,tags:["banchay"],col:"#370b1a",lead:"Malbec vùng cao Mendoza, màu đậm, vị trái cây chín.",taste:"Việt quất, socola đen, tannin mượt.",food:"Bít tết, thịt nướng than.",temp:"16–18°C"},
+ {id:4,name:"Viña Cordillera Cabernet Sauvignon",brand:"Viña Cordillera",type:"do",country:"Chile",region:"Thung lũng Maipo",grape:"Cabernet Sauvignon",vin:"2021",abv:13.5,vol:750,price:420000,tags:["banchay"],col:"#561426",lead:"Cabernet Chile dễ uống, giá hợp lý cho tiệc đông người.",taste:"Mận, ớt chuông, gỗ sồi nhẹ.",food:"Sườn nướng, pizza, mì Ý sốt thịt.",temp:"16–18°C"},
+ {id:5,name:"Tenuta Serena Chianti Classico",brand:"Tenuta Serena",type:"do",country:"Ý",region:"Toscana",grape:"Sangiovese",vin:"2020",abv:13.5,vol:750,price:780000,tags:["moi"],col:"#5e1a22",lead:"Chianti Classico vị chua tươi, hợp món Ý và món có cà chua.",taste:"Anh đào đỏ, thảo mộc khô.",food:"Mì Ý, pizza, thịt nguội.",temp:"15–17°C"},
+ {id:6,name:"Tenuta Serena Primitivo di Puglia",brand:"Tenuta Serena",type:"do",country:"Ý",region:"Puglia",grape:"Primitivo",vin:"2021",abv:14.5,vol:750,price:520000,tags:[],col:"#44101c",lead:"Vang đỏ miền nam nước Ý, đậm vị, hơi ngọt hậu.",taste:"Mứt dâu, quế, cacao.",food:"Thịt kho, sườn BBQ.",temp:"16–18°C"},
+ {id:7,name:"Barossa Ridge Shiraz",brand:"Barossa Ridge",type:"do",country:"Úc",region:"Thung lũng Barossa",grape:"Shiraz",vin:"2020",abv:14.5,vol:750,price:640000,tags:["moi"],col:"#2f0a15",lead:"Shiraz Úc đậm, cay nhẹ, hợp món nướng.",taste:"Mâm xôi đen, tiêu đen, khói.",food:"Thịt nướng, cừu, đồ cay vừa.",temp:"16–18°C"},
+ {id:8,name:"Kōwhai Bay Sauvignon Blanc",brand:"Kōwhai Bay",type:"trang",country:"New Zealand",region:"Marlborough",grape:"Sauvignon Blanc",vin:"2023",abv:12.5,vol:750,price:650000,tags:["noibat","moi"],col:"#c7c27c",lead:"Vang trắng tươi, chua sắc, hợp hải sản và món Việt.",taste:"Chanh dây, bưởi, cỏ tươi.",food:"Hàu, gỏi hải sản, cá hấp.",temp:"8–10°C"},
+ {id:9,name:"Domaine Lavaud Chablis",brand:"Domaine Lavaud",type:"trang",country:"Pháp",region:"Burgundy, Chablis",grape:"Chardonnay",vin:"2021",abv:12.5,vol:750,price:1150000,tags:[],col:"#d7cc8a",lead:"Chardonnay vùng Chablis, khô, khoáng, không qua gỗ nhiều.",taste:"Táo xanh, chanh, khoáng đá.",food:"Hàu, tôm, cá nướng.",temp:"10–12°C"},
+ {id:10,name:"Barossa Ridge Chardonnay",brand:"Barossa Ridge",type:"trang",country:"Úc",region:"Adelaide Hills",grape:"Chardonnay",vin:"2022",abv:13,vol:750,price:480000,tags:["banchay"],col:"#d9bd66",lead:"Chardonnay tròn vị, có chút bơ và vani.",taste:"Đào vàng, bơ, vani.",food:"Gà nướng, cá hồi, món sốt kem.",temp:"10–12°C"},
+ {id:11,name:"Weingut Kessler Riesling Kabinett",brand:"Weingut Kessler",type:"trang",country:"Đức",region:"Mosel",grape:"Riesling",vin:"2022",abv:9.5,vol:750,price:590000,tags:["moi"],col:"#cfd08a",lead:"Riesling nhẹ độ, hơi ngọt, cân bằng với vị chua.",taste:"Táo, đào trắng, hoa.",food:"Món chua cay, đồ Thái, hải sản.",temp:"8–10°C"},
+ {id:12,name:"Maison Duverne Champagne Brut",brand:"Maison Duverne",type:"no",country:"Pháp",region:"Champagne",grape:"Chardonnay, Pinot Noir, Pinot Meunier",vin:"NV",abv:12,vol:750,price:1950000,tags:["noibat"],col:"#1f3d2c",lead:"Champagne khô cho tiệc kỷ niệm và khai trương.",taste:"Bánh mì nướng, hạnh nhân, chanh.",food:"Hải sản, tôm hùm, khai vị.",temp:"6–8°C"},
+ {id:13,name:"Tenuta Serena Prosecco Extra Dry",brand:"Tenuta Serena",type:"no",country:"Ý",region:"Veneto",grape:"Glera",vin:"NV",abv:11,vol:750,price:520000,tags:["banchay"],col:"#c8cf96",lead:"Vang nổ Ý tươi, bọt mịn, dễ uống cho tiệc.",taste:"Táo xanh, lê, hoa trắng.",food:"Khai vị, phô mai mềm.",temp:"6–8°C"},
+ {id:14,name:"Tenuta Serena Moscato d'Asti",brand:"Tenuta Serena",type:"no",country:"Ý",region:"Piedmont",grape:"Moscato Bianco",vin:"2023",abv:5.5,vol:750,price:380000,tags:[],col:"#ddd38a",lead:"Vang ngọt, sủi nhẹ, độ cồn thấp.",taste:"Nho xạ, đào, hoa cam.",food:"Bánh ngọt, trái cây tươi.",temp:"6–8°C"},
+ {id:15,name:"Glen Ardoch Single Malt 12 năm",brand:"Glen Ardoch",type:"manh",country:"Scotland",region:"Speyside",grape:"Mạch nha",vin:"12 năm",abv:40,vol:700,price:1450000,tags:["noibat"],col:"#b06e27",lead:"Single malt Speyside ủ thùng sherry, vị ngọt mật ong.",taste:"Mật ong, lê, gỗ sồi sherry.",food:"Uống nguyên chất hoặc một viên đá.",temp:"Nhiệt độ phòng"},
+ {id:16,name:"Maison Duverne Cognac VSOP",brand:"Maison Duverne",type:"manh",country:"Pháp",region:"Cognac",grape:"Ugni Blanc",vin:"VSOP",abv:40,vol:700,price:1850000,tags:[],col:"#874317",lead:"Cognac VSOP ủ tối thiểu bốn năm, ấm và tròn vị.",taste:"Nho khô, vỏ cam, gia vị ấm.",food:"Sau bữa tối, socola đen.",temp:"Nhiệt độ phòng"},
+ {id:17,name:"Hộp quà An Khang – Bordeaux Supérieur",brand:"Hầm Rượu Vân",type:"qua",country:"Pháp",region:"Bordeaux",grape:"Merlot, Cabernet Sauvignon",vin:"2019",abv:13.5,vol:750,price:990000,tags:["noibat"],col:"#6b1527",set:"1 chai Bordeaux Supérieur, 2 ly pha lê",lead:"Hộp quà một chai kèm hai ly, hợp biếu Tết và tri ân.",taste:"Mận chín, lý chua đen.",food:"Bò sốt vang, phô mai.",temp:"16–18°C"},
+ {id:18,name:"Hộp quà Đoàn Viên – Malbec & Chardonnay",brand:"Hầm Rượu Vân",type:"qua",country:"Argentina",region:"Mendoza, Adelaide Hills",grape:"Malbec, Chardonnay",vin:"2020–2022",abv:14,vol:1500,price:1290000,tags:["moi"],col:"#2c2a2a",set:"1 Malbec, 1 Chardonnay, hộp gỗ",lead:"Cặp vang đỏ và trắng cho bữa tiệc gia đình.",taste:"Việt quất; đào vàng.",food:"Thịt nướng; gà, cá hồi.",temp:"16–18°C / 10–12°C"},
+ {id:19,name:"Hộp quà Thượng Hạng – Champagne Brut",brand:"Hầm Rượu Vân",type:"qua",country:"Pháp",region:"Champagne",grape:"Chardonnay, Pinot Noir",vin:"NV",abv:12,vol:750,price:2650000,tags:[],col:"#1f3d2c",set:"1 Champagne Brut, 2 ly flute, hộp da",lead:"Hộp quà Champagne cho đối tác và dịp kỷ niệm.",taste:"Bánh mì nướng, hạnh nhân.",food:"Hải sản, khai vị.",temp:"6–8°C"},
+ {id:20,name:"Hộp quà Thịnh Vượng – Saint-Émilion đôi",brand:"Hầm Rượu Vân",type:"qua",country:"Pháp",region:"Bordeaux, Saint-Émilion",grape:"Merlot, Cabernet Franc",vin:"2018",abv:14,vol:1500,price:3950000,tags:["banchay"],col:"#3a0c18",set:"2 chai Saint-Émilion Grand Cru, hộp gỗ",lead:"Hộp đôi Grand Cru cho quà biếu cấp cao.",taste:"Anh đào đen, thuốc lá.",food:"Thăn bò, cừu.",temp:"17–18°C"},
+ {id:21,name:"Bộ 2 ly vang pha lê Bordeaux",brand:"Hầm Rượu Vân",type:"pk",kind:"glass",price:450000,tags:[],col:"#9aa7a8",set:"2 ly, dung tích 650 ml/ly",lead:"Ly miệng rộng cho vang đỏ, giúp vang tiếp xúc không khí.",taste:"",food:"",temp:""},
+ {id:22,name:"Dụng cụ mở nút hai nấc",brand:"Hầm Rượu Vân",type:"pk",kind:"opener",price:280000,tags:[],col:"#8a6a3a",set:"Thép không gỉ, có dao cắt màng",lead:"Mở nút bần hai nấc, ít làm gãy nút.",taste:"",food:"",temp:""},
+ {id:23,name:"Bình chiết vang 1,5 lít",brand:"Hầm Rượu Vân",type:"pk",kind:"decanter",price:690000,tags:["moi"],col:"#9aa7a8",set:"Thủy tinh không chì, 1,5 lít",lead:"Chiết vang đỏ trước khi rót để vang mở hương.",taste:"",food:"",temp:""}
+];
+const TAGN={noibat:"Nổi bật",banchay:"Bán chạy",moi:"Mới về"};
+const PRICES=[{k:"lt1",n:"Dưới 1 triệu",a:0,b:1e6},{k:"1-2",n:"1 – 2 triệu",a:1e6,b:2e6},{k:"2-5",n:"2 – 5 triệu",a:2e6,b:5e6},{k:"gt5",n:"Trên 5 triệu",a:5e6,b:1e12}];
+const OCC=[
+ {n:"Biếu đối tác",f:{types:["qua"]}},
+ {n:"Tiệc gia đình",f:{types:["do"],price:"lt1"}},
+ {n:"Ăn hải sản",f:{types:["trang","no"]}},
+ {n:"Kỷ niệm",f:{types:["no"]}}
+];
+
+/* ===== Tiện ích ===== */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const vnd=n=>n.toLocaleString("vi-VN")+"₫";
+const byId=id=>P.find(p=>p.id===id);
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(_){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}};
+
+/* ===== Trạng thái ===== */
+const S={
+  f:{types:new Set(),countries:new Set(),brands:new Set(),price:"",q:""},
+  sort:"rel", tag:"noibat",
+  cart:new Map(store.get("hrv-cart",[])),
+  fav:new Set(store.get("hrv-fav",[]))
+};
+const saveCart=()=>{store.set("hrv-cart",[...S.cart]);badges()};
+const saveFav=()=>{store.set("hrv-fav",[...S.fav]);badges()};
+
+/* ===== Hình minh họa (SVG, không phụ thuộc ảnh ngoài) ===== */
+function art(p,big){
+  const id="g"+p.id+(big?"b":"");
+  const shine=`<linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".0"/><stop offset=".3" stop-color="#fff" stop-opacity=".28"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+  const label=(y,h,txt)=>`<rect x="26" y="${y}" width="48" height="${h}" rx="2" fill="#f6efe3"/><rect x="31" y="${y+6}" width="38" height="1.5" fill="#a8833f"/><text x="50" y="${y+h/2+3}" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" fill="#3a2a22">${esc(txt)}</text><rect x="31" y="${y+h-8}" width="38" height="1.5" fill="#a8833f"/>`;
+  const short=(p.brand||"").split(" ").slice(-1)[0].slice(0,10);
+  if(p.type==="qua"){
+    return `<svg viewBox="0 0 120 200" role="img" aria-label="${esc(p.name)}"><defs>${shine}</defs>
+      <path d="M44 20h12v30c0 7 8 11 8 22v20H36V72c0-11 8-15 8-22z" fill="${p.col}"/><rect x="45" y="10" width="10" height="14" rx="2" fill="#a8833f"/>
+      <rect x="10" y="88" width="100" height="102" rx="4" fill="#1e1a1b"/><rect x="10" y="88" width="100" height="22" rx="4" fill="#2b2526"/>
+      <rect x="54" y="88" width="12" height="102" fill="#a8833f"/><rect x="10" y="130" width="100" height="10" fill="#a8833f"/>
+      <path d="M60 88c-14-14-26-6-18 2 6 5 18-2 18-2zm0 0c14-14 26-6 18 2-6 5-18-2-18-2z" fill="#c9a35b"/>
+      <text x="60" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#e9dcc3">HẦM VÂN</text></svg>`;
+  }
+  if(p.type==="pk"){
+    if(p.kind==="opener") return `<svg viewBox="0 0 120 200" role="img" aria-label="${esc(p.name)}"><rect x="20" y="96" width="80" height="16" rx="8" fill="${p.col}"/><rect x="56" y="112" width="8" height="10" fill="#9aa0a3"/><path d="M60 122c8 4-8 8 0 12s-8 8 0 12-8 8 0 12-8 8 0 12" stroke="#9aa0a3" stroke-width="3.5" fill="none"/><rect x="20" y="100" width="80" height="4" rx="2" fill="#fff" opacity=".25"/></svg>`;
+    if(p.kind==="decanter") return `<svg viewBox="0 0 120 200" role="img" aria-label="${esc(p.name)}"><defs>${shine}</defs><path d="M52 30h16v48c22 14 36 40 36 70 0 22-20 40-44 40S16 170 16 148c0-30 14-56 36-70z" fill="${p.col}" opacity=".35"/><path d="M22 150c0-10 76-10 76 0 0 20-17 34-38 34s-38-14-38-34z" fill="#5a1424" opacity=".85"/><path d="M52 30h16v48c22 14 36 40 36 70 0 22-20 40-44 40S16 170 16 148c0-30 14-56 36-70z" fill="url(#${id})"/></svg>`;
+    return `<svg viewBox="0 0 120 200" role="img" aria-label="${esc(p.name)}"><defs>${shine}</defs><g opacity=".9"><path d="M22 40h36c0 30-6 48-18 52-12-4-18-22-18-52z" fill="${p.col}" opacity=".35"/><path d="M24 66h32c-2 14-7 22-16 26-9-4-14-12-16-26z" fill="#5a1424"/><rect x="38" y="92" width="4" height="58" fill="${p.col}"/><ellipse cx="40" cy="152" rx="16" ry="4" fill="${p.col}"/></g><g transform="translate(40 14)"><path d="M22 40h36c0 30-6 48-18 52-12-4-18-22-18-52z" fill="${p.col}" opacity=".35"/><path d="M24 66h32c-2 14-7 22-16 26-9-4-14-12-16-26z" fill="#5a1424"/><rect x="38" y="92" width="4" height="58" fill="${p.col}"/><ellipse cx="40" cy="152" rx="16" ry="4" fill="${p.col}"/></g></svg>`;
+  }
+  if(p.type==="manh"){
+    return `<svg viewBox="0 0 100 200" role="img" aria-label="${esc(p.name)}"><defs>${shine}</defs><rect x="39" y="8" width="22" height="24" rx="3" fill="#1e1a1b"/><rect x="39" y="12" width="22" height="3" fill="#a8833f"/><path d="M37 32h26v14l16 12v130a6 6 0 0 1-6 6H27a6 6 0 0 1-6-6V58l16-12z" fill="${p.col}"/><path d="M37 32h26v14l16 12v130a6 6 0 0 1-6 6H27a6 6 0 0 1-6-6V58l16-12z" fill="url(#${id})"/>${label(98,58,short)}</svg>`;
+  }
+  const foil=p.type==="no"?`<rect x="41" y="4" width="18" height="52" rx="3" fill="#b8924a"/><rect x="41" y="44" width="18" height="3" fill="#8a6a2e"/>`:`<rect x="42" y="4" width="16" height="26" rx="2" fill="#2a1f22"/>`;
+  return `<svg viewBox="0 0 100 200" role="img" aria-label="${esc(p.name)}"><defs>${shine}</defs><path d="M42 24h16v40c0 10 18 16 18 34v92a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6V98c0-18 18-24 18-34z" fill="${p.col}"/><path d="M42 24h16v40c0 10 18 16 18 34v92a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6V98c0-18 18-24 18-34z" fill="url(#${id})"/>${foil}${label(122,52,short)}</svg>`;
+}
+function catArt(k){
+  const sample={do:1,trang:8,no:12,manh:15,qua:17,pk:21}[k];
+  return art(byId(sample));
+}
+
+/* ===== Thẻ sản phẩm ===== */
+function spec(p){
+  if(p.type==="pk"||p.type==="qua") return esc(p.set);
+  return `${esc(p.vin)} · ${p.abv}% · ${p.vol} ml`;
+}
+function card(p){
+  const t=p.tags[0];
+  return `<article class="card">
+    ${t?`<span class="flag">${TAGN[t]}</span>`:""}
+    <button class="fav" type="button" data-fav="${p.id}" aria-pressed="${S.fav.has(p.id)}" aria-label="${S.fav.has(p.id)?"Bỏ yêu thích":"Thêm vào yêu thích"}: ${esc(p.name)}"><svg class="ico"><use href="#i-heart"/></svg></button>
+    <a class="art" href="#p-${p.id}" tabindex="-1" aria-hidden="true">${art(p)}</a>
+    <div class="info">
+      <span class="meta">${TYPES[p.type].n}${p.country?" · "+esc(p.country):""}</span>
+      <h3><a href="#p-${p.id}">${esc(p.name)}</a></h3>
+      <span class="spec">${spec(p)}</span>
+      <div class="foot"><span class="price">${vnd(p.price)}</span>
+      <button class="btn btn-line" type="button" data-add="${p.id}">Thêm vào giỏ</button></div>
+    </div></article>`;
+}
+
+/* ===== Lọc ===== */
+function priceOf(k){return PRICES.find(x=>x.k===k)}
+function match(p,f,skip){
+  if(skip!=="types"&&f.types.size&&!f.types.has(p.type))return false;
+  if(skip!=="countries"&&f.countries.size&&!f.countries.has(p.country))return false;
+  if(skip!=="brands"&&f.brands.size&&!f.brands.has(p.brand))return false;
+  if(skip!=="price"&&f.price){const r=priceOf(f.price);if(p.price<r.a||p.price>=r.b)return false}
+  if(f.q){const q=norm(f.q);if(!norm([p.name,p.brand,p.grape||"",p.region||"",p.country||"",TYPES[p.type].n].join(" ")).includes(q))return false}
+  return true;
+}
+function score(p,q){
+  if(!q)return (p.tags.includes("noibat")?2:0)+(p.tags.includes("banchay")?1:0);
+  q=norm(q);return (norm(p.name).includes(q)?3:0)+(norm(p.brand).includes(q)?2:0)+1;
+}
+function results(){
+  let r=P.filter(p=>match(p,S.f));
+  if(S.sort==="asc")r.sort((a,b)=>a.price-b.price);
+  else if(S.sort==="desc")r.sort((a,b)=>b.price-a.price);
+  else if(S.sort==="new")r.sort((a,b)=>(b.tags.includes("moi")-a.tags.includes("moi"))||b.id-a.id);
+  else r.sort((a,b)=>score(b,S.f.q)-score(a,S.f.q));
+  return r;
+}
+function facet(key,list,label){
+  const set=S.f[key];
+  return `<div class="fg"><h3>${label}</h3>${list.map(([v,n])=>{
+    const c=P.filter(p=>match(p,S.f,key)&&(key==="types"?p.type===v:key==="countries"?p.country===v:p.brand===v)).length;
+    return `<label><input type="checkbox" data-facet="${key}" value="${esc(v)}" ${set.has(v)?"checked":""} ${c||set.has(v)?"":"disabled"}> ${esc(n)} <small>${c}</small></label>`;}).join("")}</div>`;
+}
+function renderFilters(){
+  const countries=[...new Set(P.map(p=>p.country).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"vi")).map(c=>[c,c]);
+  const brands=[...new Set(P.map(p=>p.brand))].sort().map(b=>[b,b]);
+  $("#fBody").innerHTML=
+    facet("types",Object.entries(TYPES).map(([k,v])=>[k,v.n]),"Loại")+
+    `<div class="fg"><h3>Mức giá</h3><label><input type="radio" name="pr" data-price="" ${S.f.price?"":"checked"}> Tất cả</label>${PRICES.map(r=>{
+      const c=P.filter(p=>match(p,S.f,"price")&&p.price>=r.a&&p.price<r.b).length;
+      return `<label><input type="radio" name="pr" data-price="${r.k}" ${S.f.price===r.k?"checked":""}> ${r.n} <small>${c}</small></label>`}).join("")}</div>`+
+    facet("countries",countries,"Quốc gia")+
+    facet("brands",brands,"Thương hiệu");
+}
+function chips(){
+  const out=[];
+  S.f.types.forEach(v=>out.push(["types",v,TYPES[v].n]));
+  if(S.f.price)out.push(["price",S.f.price,priceOf(S.f.price).n]);
+  S.f.countries.forEach(v=>out.push(["countries",v,v]));
+  S.f.brands.forEach(v=>out.push(["brands",v,v]));
+  if(S.f.q)out.push(["q",S.f.q,`“${S.f.q}”`]);
+  $("#activeF").innerHTML=out.length?out.map(([k,v,n])=>`<button type="button" data-unf="${k}" data-v="${esc(v)}" aria-label="Bỏ lọc ${esc(n)}">${esc(n)} <span aria-hidden="true">×</span></button>`).join("")+`<button class="clear" type="button" data-clear>Xóa tất cả</button>`:"";
+  return out.length;
+}
+function renderShop(){
+  renderFilters();
+  const n=chips();
+  const r=results();
+  const one=S.f.types.size===1?TYPES[[...S.f.types][0]].n:"";
+  const title=S.f.q?`Kết quả cho “${S.f.q}”`:one||"Tất cả sản phẩm";
+  $("#shopTitle").textContent=title;$("#shopCrumb").textContent=title;
+  $("#shopCount").textContent=`${r.length} sản phẩm${n?" phù hợp bộ lọc":""}`;
+  $("#fApplyBtn").textContent=`Xem ${r.length} sản phẩm`;
+  $("#openF").innerHTML=`<svg class="ico"><use href="#i-filter"/></svg>Bộ lọc${n?` (${n})`:""}`;
+  $("#shopGrid").innerHTML=r.length?r.map(card).join(""):
+    `<div class="empty" style="grid-column:1/-1"><h3>Không có sản phẩm phù hợp</h3><p>Thử bỏ bớt điều kiện lọc hoặc tìm bằng từ khóa khác, ví dụ “Bordeaux” hoặc “Chardonnay”.</p><button class="btn btn-primary" type="button" data-clear>Xóa bộ lọc</button></div>`;
+}
+function clearF(){S.f.types.clear();S.f.countries.clear();S.f.brands.clear();S.f.price="";S.f.q="";$("#q").value=""}
+function goShop(preset){
+  clearF();
+  if(preset){
+    (preset.types||[]).forEach(t=>S.f.types.add(t));
+    (preset.countries||[]).forEach(t=>S.f.countries.add(t));
+    if(preset.price)S.f.price=preset.price;
+    if(preset.q){S.f.q=preset.q;$("#q").value=preset.q}
+  }
+  S.sort="rel";$("#sort").value="rel";
+  if(location.hash==="#shop"){render();window.scrollTo(0,0)}else location.hash="shop";
+}
+function parseGo(s){
+  if(s==="all")return {};
+  const [k,v]=s.split(":");
+  return k==="type"?{types:[v]}:k==="country"?{countries:[v]}:k==="price"?{price:v}:{};
+}
+
+/* ===== Trang chủ ===== */
+function renderHome(){
+  $("#heroArt").innerHTML=art(byId(2),true)+art(byId(12),true);
+  $("#occ").innerHTML='<span>Chọn theo dịp:</span>'+OCC.map((o,i)=>`<button type="button" data-occ="${i}">${o.n}</button>`).join("");
+  $("#cats").innerHTML=Object.entries(TYPES).map(([k,v])=>`<button class="cat" type="button" data-go="type:${k}">${catArt(k)}<b>${v.n}</b><small>${v.d}</small></button>`).join("");
+  renderPicks();
+  $("#budget").innerHTML=PRICES.map(r=>[r,P.filter(p=>p.price>=r.a&&p.price<r.b).length]).filter(([,c])=>c).map(([r,c])=>{
+    return `<button type="button" data-go="price:${r.k}"><b>${r.n}</b><span>${c} sản phẩm</span><em>Xem gợi ý →</em></button>`}).join("");
+}
+function renderPicks(){
+  $$("#pickTabs .tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.tag===S.tag));
+  $("#pickGrid").innerHTML=P.filter(p=>p.tags.includes(S.tag)).slice(0,4).map(card).join("");
+}
+
+/* ===== Chi tiết ===== */
+let qty=1;
+function renderProduct(id){
+  const p=byId(id);
+  if(!p){$("#pdBody").innerHTML=`<div class="empty" style="margin-block:40px"><h3>Không tìm thấy sản phẩm</h3><button class="btn btn-primary" type="button" data-nav="shop">Về cửa hàng</button></div>`;return}
+  qty=1;
+  const facts=p.type==="pk"?[["Thành phần",p.set]]:[
+    ["Xuất xứ",`${p.region}, ${p.country}`],["Giống nho / nguyên liệu",p.grape],["Niên vụ / tuổi",p.vin],["Độ cồn",p.abv+"% ABV"],["Dung tích",p.vol+" ml"]].concat(p.set?[["Trong hộp",p.set]]:[]);
+  const rel=P.filter(x=>x.type===p.type&&x.id!==p.id).slice(0,4);
+  const fill=rel.length<4?P.filter(x=>x.id!==p.id&&!rel.includes(x)&&x.tags.includes("noibat")).slice(0,4-rel.length):[];
+  $("#pdBody").innerHTML=`
+    <nav class="crumb" aria-label="Vị trí"><button type="button" data-nav="home">Trang chủ</button><span>/</span><button type="button" data-go="type:${p.type}">${TYPES[p.type].n}</button><span>/</span><span>${esc(p.name)}</span></nav>
+    <div class="pd">
+      <div class="stage">${art(p,true)}</div>
+      <div>
+        <p class="eyebrow">${esc(p.brand)}${p.tags[0]?" · "+TAGN[p.tags[0]]:""}</p>
+        <h1>${esc(p.name)}</h1>
+        <div class="price">${vnd(p.price)}</div>
+        <p class="lead">${esc(p.lead)}</p>
+        <dl class="facts">${facts.map(([a,b])=>`<div><dt>${a}</dt><dd>${esc(b)}</dd></div>`).join("")}</dl>
+        <div class="buy">
+          <div class="stepper" role="group" aria-label="Số lượng"><button type="button" data-q="-1" aria-label="Giảm số lượng" disabled>−</button><output id="qOut" aria-live="polite">1</output><button type="button" data-q="1" aria-label="Tăng số lượng">+</button></div>
+          <button class="btn btn-primary" type="button" data-addq="${p.id}" style="flex:1;min-width:180px">Thêm vào giỏ · <span id="qPrice">${vnd(p.price)}</span></button>
+          <button class="fav" type="button" data-fav="${p.id}" aria-pressed="${S.fav.has(p.id)}" aria-label="Yêu thích"><svg class="ico"><use href="#i-heart"/></svg></button>
+        </div>
+        ${p.taste?`<div class="notes">
+          <div><h3>Hương vị</h3><p>${esc(p.taste)}</p></div>
+          <div><h3>Món ăn gợi ý</h3><p>${esc(p.food)}</p></div>
+          <div><h3>Nhiệt độ phục vụ</h3><p>${esc(p.temp)}</p></div></div>`:""}
+      </div>
+    </div>
+    <section aria-labelledby="h-rel" style="padding-bottom:24px"><div class="shead"><h2 id="h-rel">Có thể bạn cũng thích</h2></div>
+      <div class="grid">${rel.concat(fill).map(card).join("")}</div></section>`;
+  document.title=p.name+" · Hầm Rượu Vân";
+}
+function setQty(d){
+  const p=byId(+location.hash.slice(3));qty=Math.min(24,Math.max(1,qty+d));
+  $("#qOut").textContent=qty;$("#qPrice").textContent=vnd(p.price*qty);
+  $('[data-q="-1"]').disabled=qty<=1;$('[data-q="1"]').disabled=qty>=24;
+}
+
+/* ===== Giỏ ===== */
+function totals(){let n=0,s=0;S.cart.forEach((q,id)=>{const p=byId(id);if(p){n+=q;s+=p.price*q}});return {n,s}}
+function badges(){
+  const {n}=totals();
+  $$("[data-cartn]").forEach(b=>{b.textContent=n;b.hidden=!n});
+  $$("[data-favn]").forEach(b=>{b.textContent=S.fav.size;b.hidden=!S.fav.size});
+}
+function add(id,q=1){
+  const cur=S.cart.get(id)||0;S.cart.set(id,Math.min(24,cur+q));saveCart();
+  toast(`Đã thêm ${q>1?q+" × ":""}${byId(id).name} vào giỏ`);
+}
+let tt;function toast(m){$("#toastMsg").textContent=m;$("#toast").hidden=false;clearTimeout(tt);tt=setTimeout(()=>$("#toast").hidden=true,3500)}
+function summary(btn){
+  const {n,s}=totals();
+  return `<aside class="sum" aria-label="Tổng kết đơn hàng"><h2>Tổng kết</h2>
+    <div class="r"><span>Số sản phẩm</span><span>${n}</span></div>
+    <div class="r"><span>Tạm tính</span><span>${vnd(s)}</span></div>
+    <div class="r"><span>Phí giao hàng</span><span>Báo khi xác nhận</span></div>
+    <div class="r tot"><span>Tổng tạm tính</span><span>${vnd(s)}</span></div>
+    ${btn||""}
+    <p class="note">Giá và phí giao trong bản demo là dữ liệu mẫu.</p></aside>`;
+}
+function renderCart(){
+  const lines=[...S.cart].filter(([id])=>byId(id));
+  if(!lines.length){
+    $("#cartBody").innerHTML=`<nav class="crumb"><button type="button" data-nav="home">Trang chủ</button><span>/</span><span>Giỏ hàng</span></nav>
+      <div class="empty" style="margin-block:24px 64px"><svg class="ico" style="width:40px;height:40px"><use href="#i-bag"/></svg><h3>Giỏ hàng đang trống</h3><p>Chọn vài chai từ bộ sưu tập hoặc xem hộp quà theo ngân sách.</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn btn-primary" type="button" data-nav="shop">Xem sản phẩm</button><button class="btn btn-line" type="button" data-go="type:qua">Xem hộp quà</button></div></div>`;
+    return;
+  }
+  $("#cartBody").innerHTML=`<nav class="crumb"><button type="button" data-nav="home">Trang chủ</button><span>/</span><span>Giỏ hàng</span></nav>
+    <div class="ftools"><h1>Giỏ hàng</h1></div>
+    <div class="cartg"><div><div class="lines">${lines.map(([id,q])=>{const p=byId(id);return `
+      <div class="line"><div class="thumb">${art(p)}</div>
+        <div><a href="#p-${p.id}">${esc(p.name)}</a><div class="spec">${vnd(p.price)} / sản phẩm</div><button class="rm" type="button" data-rm="${p.id}">Xóa khỏi giỏ</button></div>
+        <div class="stepper" role="group" aria-label="Số lượng ${esc(p.name)}"><button type="button" data-cq="${p.id}" data-d="-1" aria-label="Giảm">−</button><output>${q}</output><button type="button" data-cq="${p.id}" data-d="1" aria-label="Tăng" ${q>=24?"disabled":""}>+</button></div>
+        <div class="lt">${vnd(p.price*q)}</div></div>`}).join("")}</div>
+      <p style="margin-top:16px"><button class="link" type="button" data-nav="shop">← Tiếp tục mua sắm</button></p></div>
+      ${summary('<button class="btn btn-primary" type="button" data-nav="checkout">Tiến hành đặt hàng</button>')}</div>`;
+}
+
+/* ===== Đặt hàng (demo, không gửi đi) ===== */
+const draft=store.get("hrv-draft",{});
+function renderCheckout(){
+  if(!totals().n){location.hash="cart";return}
+  $("#coBody").innerHTML=`<nav class="crumb"><button type="button" data-nav="home">Trang chủ</button><span>/</span><button type="button" data-nav="cart">Giỏ hàng</button><span>/</span><span>Đặt hàng</span></nav>
+  <div class="ftools"><h1>Thông tin đặt hàng</h1></div>
+  <div class="cartg">
+    <form class="form" id="coForm" novalidate>
+      <div class="alert alert-info" role="note"><b>Bản demo</b><span>Biểu mẫu kiểm tra thông tin ngay trên trang. Đơn chưa được gửi tới cửa hàng và chưa có thanh toán. Bản thật cần backend để lưu đơn và báo cho cửa hàng.</span></div>
+      <div class="row2">
+        <div class="field" id="f-name"><label for="coName">Họ và tên</label><input id="coName" autocomplete="name" value="${esc(draft.name||"")}"><span class="msg">Nhập họ và tên người nhận.</span></div>
+        <div class="field" id="f-phone"><label for="coPhone">Số điện thoại</label><input id="coPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="VD: 0912 345 678" value="${esc(draft.phone||"")}"><span class="msg">Số điện thoại gồm 10 chữ số, bắt đầu bằng 0.</span></div>
+      </div>
+      <div class="field" id="f-addr"><label for="coAddr">Địa chỉ giao hàng</label><input id="coAddr" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, tỉnh/thành" value="${esc(draft.addr||"")}"><span class="msg">Nhập địa chỉ giao hàng.</span></div>
+      <div class="field"><label for="coNote">Ghi chú <span class="spec">(không bắt buộc)</span></label><textarea id="coNote" rows="2" placeholder="Giờ nhận, xuất hóa đơn, thiệp chúc mừng…">${esc(draft.note||"")}</textarea></div>
+      <fieldset class="field"><legend>Thanh toán</legend><div class="pay">
+        <label><input type="radio" name="pay" value="cod" checked><span><b>Thanh toán khi nhận hàng</b><small>Trả tiền mặt cho người giao.</small></span></label>
+        <label><input type="radio" name="pay" value="bank"><span><b>Chuyển khoản</b><small>Cửa hàng gửi số tài khoản khi xác nhận đơn.</small></span></label>
+      </div></fieldset>
+      <div class="field" id="f-age"><label class="check"><input type="checkbox" id="coAge"> Tôi xác nhận người đặt và người nhận đều từ đủ 18 tuổi.</label><span class="msg">Cần xác nhận độ tuổi để tiếp tục.</span></div>
+      <div id="coRes" aria-live="polite"></div>
+      <button class="btn btn-primary" type="submit" id="coBtn">Kiểm tra và xem lại đơn</button>
+    </form>
+    ${summary(`<div class="spec">${[...S.cart].filter(([id])=>byId(id)).map(([id,q])=>`${q} × ${esc(byId(id).name)}`).join("<br>")}</div>`)}
+  </div>`;
+}
+function checkout(e){
+  e.preventDefault();
+  const v={name:$("#coName").value.trim(),phone:$("#coPhone").value.replace(/[\s.]/g,""),addr:$("#coAddr").value.trim(),note:$("#coNote").value.trim()};
+  const bad={name:v.name.length<2,phone:!/^(0|\+84)\d{9}$/.test(v.phone),addr:v.addr.length<8,age:!$("#coAge").checked};
+  Object.entries(bad).forEach(([k,b])=>{const f=$("#f-"+k);b?f.setAttribute("data-err",""):f.removeAttribute("data-err")});
+  const first=Object.keys(bad).find(k=>bad[k]);
+  if(first){
+    $("#coRes").innerHTML=`<div class="alert alert-err" role="alert">Còn ${Object.values(bad).filter(Boolean).length} mục chưa hợp lệ, xem các ô viền đỏ.</div>`;
+    ({name:$("#coName"),phone:$("#coPhone"),addr:$("#coAddr"),age:$("#coAge")})[first].focus();return;
+  }
+  const btn=$("#coBtn");btn.disabled=true;btn.innerHTML='<span class="spin" aria-hidden="true"></span>Đang kiểm tra…';
+  setTimeout(()=>{
+    btn.disabled=false;btn.textContent="Kiểm tra lại";
+    const pay=document.querySelector('input[name="pay"]:checked').value==="cod"?"Thanh toán khi nhận hàng":"Chuyển khoản";
+    $("#coRes").innerHTML=`<div class="alert alert-info"><b>Thông tin hợp lệ. Đơn CHƯA được gửi.</b>
+      <span>${esc(v.name)} · ${esc(v.phone)} · ${esc(v.addr)} · ${pay} · Tổng tạm tính ${vnd(totals().s)}.</span>
+      <span>Bản demo dừng ở bước này. Bản thật sẽ lưu đơn, gửi thông báo cho cửa hàng (Zalo/email) và trả mã đơn cho khách.</span></div>`;
+  },700);
+}
+
+/* ===== Yêu thích ===== */
+function renderFav(){
+  const list=P.filter(p=>S.fav.has(p.id));
+  $("#favCount").textContent=`${list.length} sản phẩm`;
+  $("#favGrid").innerHTML=list.length?list.map(card).join(""):`<div class="empty" style="grid-column:1/-1"><h3>Chưa có sản phẩm yêu thích</h3><p>Bấm biểu tượng trái tim trên sản phẩm để lưu lại.</p><button class="btn btn-primary" type="button" data-nav="shop">Xem sản phẩm</button></div>`;
+}
+
+/* ===== Menu ===== */
+function menuHTML(){
+  const countries=[...new Set(P.filter(p=>p.type!=="pk").map(p=>p.country))].sort((a,b)=>a.localeCompare(b,"vi"));
+  const col=(h,items)=>`<div><h4>${h}</h4><ul>${items.map(([g,n])=>`<li><button type="button" data-go="${g}">${esc(n)}</button></li>`).join("")}</ul></div>`;
+  return col("Rượu vang",[["type:do","Vang đỏ"],["type:trang","Vang trắng"],["type:no","Champagne & vang nổ"],["all","Tất cả sản phẩm"]])+
+    col("Theo quốc gia",countries.map(c=>["country:"+c,c]))+
+    col("Quà & phụ kiện",[["type:qua","Hộp quà"],["type:manh","Rượu mạnh"],["type:pk","Phụ kiện"]])+
+    col("Theo ngân sách",PRICES.map(r=>["price:"+r.k,r.n]));
+}
+function navHTML(){
+  const countries=[...new Set(P.filter(p=>p.type!=="pk").map(p=>p.country))].sort((a,b)=>a.localeCompare(b,"vi"));
+  const dd=(label,items)=>`<div class="dd"><button type="button" aria-haspopup="true">${label}<span class="chev" aria-hidden="true">▼</span></button><div class="ddm">${items.map(([g,n])=>`<button type="button" data-go="${g}">${esc(n)}</button>`).join("")}</div></div>`;
+  return `<button type="button" data-nav="home" data-cn="home">Trang chủ</button>`+
+    Object.entries(TYPES).map(([k,v])=>`<button type="button" data-go="type:${k}" data-cn="${k}">${v.n}</button>`).join("")+
+    dd("Theo quốc gia",countries.map(c=>["country:"+c,c]))+
+    dd("Theo ngân sách",PRICES.map(r=>["price:"+r.k,r.n]))+
+    `<button type="button" data-scroll="h-guide">Kiến thức</button>`;
+}
+function markNav(v){
+  const cur=v==="home"?"home":(v==="shop"&&S.f.types.size===1&&!S.f.q)?[...S.f.types][0]:"";
+  $$("#catnav [data-cn]").forEach(b=>b.dataset.cn===cur?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
+}
+function drawer(open){$("#drawer").hidden=!open;$("#shade").hidden=!open&&!$("#filters").classList.contains("open");document.body.classList.toggle("lock",open)}
+function filtersPanel(open){$("#filters").classList.toggle("open",open);$("#shade").hidden=!open;document.body.classList.toggle("lock",open);if(open)$("#filters").focus?.()}
+
+/* ===== Gợi ý tìm kiếm ===== */
+let sIdx=-1;
+function suggest(){
+  const q=$("#q").value.trim();const box=$("#suggest");
+  if(q.length<2){box.hidden=true;return}
+  const r=P.filter(p=>match(p,{types:new Set(),countries:new Set(),brands:new Set(),price:"",q})).slice(0,5);
+  sIdx=-1;
+  box.innerHTML=(r.length?r.map(p=>`<button type="button" role="option" data-sug="${p.id}">${art(p)}<span>${esc(p.name)}<small>${TYPES[p.type].n} · ${vnd(p.price)}</small></span></button>`).join(""):`<p class="spec" style="margin:8px">Không có gợi ý cho “${esc(q)}”.</p>`)+
+    `<button type="button" class="all" data-sugall>Xem tất cả kết quả cho “${esc(q)}”</button>`;
+  box.hidden=false;
+}
+
+/* ===== Điều hướng ===== */
+function render(){
+  const h=location.hash.slice(1)||"home";
+  let v=h.startsWith("p-")?"product":h;
+  if(!["home","shop","product","fav","cart","checkout"].includes(v))v="home";
+  $$("[data-view]").forEach(el=>el.hidden=el.dataset.view!==v);
+  $$(".bnav [data-nav]").forEach(b=>b.dataset.nav===v||(v==="product"&&b.dataset.nav==="shop")||(v==="checkout"&&b.dataset.nav==="cart")?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
+  if(v!=="product")document.title="Hầm Rượu Vân";
+  if(v==="home")renderHome();
+  if(v==="shop")renderShop();
+  if(v==="product")renderProduct(+h.slice(2));
+  if(v==="fav")renderFav();
+  if(v==="cart")renderCart();
+  if(v==="checkout")renderCheckout();
+  markNav(v);$("#suggest").hidden=true;
+  const a=document.activeElement;if(a&&a.closest&&a.closest(".dd"))a.blur();
+}
+function onRoute(){render();window.scrollTo(0,0)}
+window.addEventListener("hashchange",onRoute);
+
+/* ===== Sự kiện ===== */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,a");if(!t)return;
+  const d=t.dataset;
+  if(d.nav){if(location.hash==="#"+d.nav)render();else location.hash=d.nav;drawer(false);filtersPanel(false);$("#toast").hidden=true;return}
+  if(d.go){drawer(false);goShop(parseGo(d.go));return}
+  if(d.occ){goShop(OCC[+d.occ].f);return}
+  if(d.add){add(+d.add);return}
+  if(d.addq){add(+d.addq,qty);return}
+  if(d.q){setQty(+d.q);return}
+  if(d.fav){const id=+d.fav;S.fav.has(id)?S.fav.delete(id):S.fav.add(id);saveFav();
+    $$(`[data-fav="${id}"]`).forEach(b=>{b.setAttribute("aria-pressed",S.fav.has(id))});
+    if(location.hash==="#fav")renderFav();return}
+  if(d.tag){S.tag=d.tag;renderPicks();return}
+  if(d.unf){const k=d.unf;if(k==="price")S.f.price="";else if(k==="q"){S.f.q="";$("#q").value=""}else S.f[k].delete(d.v);renderShop();return}
+  if("clear" in d){clearF();renderShop();return}
+  if("closef" in d){filtersPanel(false);return}
+  if(d.rm){S.cart.delete(+d.rm);saveCart();renderCart();return}
+  if(d.cq){const id=+d.cq,q=(S.cart.get(id)||0)+(+d.d);q>0?S.cart.set(id,Math.min(24,q)):S.cart.delete(id);saveCart();renderCart();return}
+  if(d.sug){location.hash="p-"+d.sug;$("#q").blur();return}
+  if("sugall" in d){goShop({q:$("#q").value.trim()});return}
+  if(d.scroll){if(location.hash!=="#home"&&location.hash!==""){location.hash="home";setTimeout(()=>document.getElementById(d.scroll).scrollIntoView(),30)}else document.getElementById(d.scroll).scrollIntoView();return}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.facet){const s=S.f[t.dataset.facet];t.checked?s.add(t.value):s.delete(t.value);renderShop();return}
+  if("price" in t.dataset&&t.name==="pr"){S.f.price=t.dataset.price;renderShop();return}
+  if(t.id==="sort"){S.sort=t.value;renderShop()}
+});
+document.addEventListener("input",e=>{
+  if(["coName","coPhone","coAddr","coNote"].includes(e.target.id)){
+    store.set("hrv-draft",{name:$("#coName").value,phone:$("#coPhone").value,addr:$("#coAddr").value,note:$("#coNote").value});
+    const f=e.target.closest(".field");if(f)f.removeAttribute("data-err");
+  }
+});
+document.addEventListener("submit",e=>{if(e.target.id==="coForm")checkout(e)});
+$("#searchForm").addEventListener("submit",e=>{e.preventDefault();const q=$("#q").value.trim();goShop(q?{q}:null);$("#q").blur()});
+$("#q").addEventListener("input",suggest);
+$("#q").addEventListener("keydown",e=>{
+  const opts=$$("#suggest button");if($("#suggest").hidden||!opts.length)return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();sIdx=(sIdx+(e.key==="ArrowDown"?1:-1)+opts.length)%opts.length;opts.forEach((o,i)=>o.classList.toggle("on",i===sIdx));opts[sIdx].scrollIntoView({block:"nearest"})}
+  else if(e.key==="Enter"&&sIdx>=0){e.preventDefault();opts[sIdx].click()}
+  else if(e.key==="Escape"){$("#suggest").hidden=true}
+});
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".search"))$("#suggest").hidden=true;
+});
+$("#menuBtn").addEventListener("click",()=>drawer(true));
+$("#closeDrawer").addEventListener("click",()=>drawer(false));
+$("#openF").addEventListener("click",()=>filtersPanel(true));
+$("#shade").addEventListener("click",()=>{drawer(false);filtersPanel(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){drawer(false);filtersPanel(false);const a=document.activeElement;if(a&&a.closest&&a.closest(".dd"))a.blur()}});
+
+/* ===== Hỏi tuổi ===== */
+if(store.get("hrv-age",false))$("#gate").hidden=true;
+else{document.body.classList.add("lock");setTimeout(()=>$("#gateYes").focus(),50)}
+$("#gateYes").addEventListener("click",()=>{store.set("hrv-age",true);$("#gate").hidden=true;document.body.classList.remove("lock")});
+$("#gateNo").addEventListener("click",()=>{$("#gateMsg").textContent="Cửa hàng chỉ phục vụ khách từ đủ 18 tuổi. Cảm ơn bạn đã ghé thăm.";$("#gateActs").hidden=true});
+
+/* ===== Khởi động ===== */
+$("#catnav").innerHTML=navHTML();
+$("#drawerBody").innerHTML=menuHTML();
+badges();render();
+</script>
+</body>
+</html>
